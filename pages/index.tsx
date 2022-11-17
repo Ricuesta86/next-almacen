@@ -30,7 +30,7 @@ function parseCurrency( value:number):string {
       {products.map(product => <Stack  background={'gray.100'}	key={product.id}>
         <Text>{product.title}</Text>
         <Text>${product.price}</Text>
-        <Button colorScheme={"blue"} onClick={()=>setCart(cart=>cart.concat(product))}>Agregar</Button>
+        <Button colorScheme={"primary"} onClick={()=>setCart(cart=>cart.concat(product))}>Agregar</Button>
       </Stack>)}
     </Grid>
     {Boolean(cart.length) && <Button colorScheme={'whatsapp'} as={Link} isExternal href={`https://wa.me/5352152326?text=${encodeURIComponent(text)}`} >Ver carrito ({cart.length} productos)</Button>}

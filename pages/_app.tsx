@@ -1,11 +1,12 @@
 
 import type { AppProps } from 'next/app'
-// pages/_app.js
 import { ChakraProvider, Container, Flex, Stack, Text } from '@chakra-ui/react'
+
+import theme from './theme'
 
 function MyApp({ Component, pageProps }:AppProps) {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Container maxW={'container.xl'}>
       <Flex direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <Text>Lado Izquierdo</Text>
