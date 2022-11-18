@@ -1,7 +1,7 @@
 import type {Product} from "./Products/types";
 
 import React, {useState} from "react";
-import {Button, Grid, Link, Stack, Text} from "@chakra-ui/react";
+import {Button, Flex, Grid, Link, Stack, Text} from "@chakra-ui/react";
 import {GetStaticProps} from "next";
 
 import api from "./Products/api";
@@ -38,12 +38,13 @@ const Home: React.FC<Props> = ({products}) => {
     <Stack>
       <Grid gridGap={6} templateColumns={"repeat(auto-fill, minmax(240px, 1fr))"}>
         {products.map((product) => (
-          <Stack
+          <Flex
             key={product.id}
             background={"gray.100"}
             borderRadius={"md"}
+            flexDirection={"column"}
+            justifyContent={"space-between"}
             padding={4}
-            spacing={3}
           >
             <Stack spacing={1}>
               <Text>{product.title}</Text>
@@ -54,18 +55,26 @@ const Home: React.FC<Props> = ({products}) => {
             <Button colorScheme={"primary"} onClick={() => setCart((cart) => cart.concat(product))}>
               Agregar
             </Button>
-          </Stack>
+          </Flex>
         ))}
       </Grid>
       {Boolean(cart.length) && (
-        <Button
-          isExternal
-          as={Link}
-          colorScheme={"whatsapp"}
-          href={`https://wa.me/5352152326?text=${encodeURIComponent(text)}`}
+        <Flex
+          alignItems={"center"}
+          bottom={0}
+          justifyContent={"center"}
+          padding={4}
+          position={"sticky"}
         >
-          Ver carrito ({cart.length} productos)
-        </Button>
+          <Button
+            isExternal
+            as={Link}
+            colorScheme={"whatsapp"}
+            href={`https://wa.me/5352152326?text=${encodeURIComponent(text)}`}
+          >
+            Ver carrito ({cart.length} productos)
+          </Button>
+        </Flex>
       )}
     </Stack>
   );
