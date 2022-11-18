@@ -1,7 +1,16 @@
 import type {Product} from "./Products/types";
 
-import React, {useState} from "react";
-import {Button, Flex, Grid, Link, Stack, Text} from "@chakra-ui/react";
+import React, {useRef, useState} from "react";
+import {Button, Flex, Grid, Link, Stack, Text, useDisclosure} from "@chakra-ui/react";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+} from "@chakra-ui/react";
 import {GetStaticProps} from "next";
 
 import api from "./Products/api";
@@ -19,6 +28,8 @@ function parseCurrency(value: number): string {
 
 const Home: React.FC<Props> = ({products}) => {
   const [cart, setCart] = useState<Product[]>([]);
+  const {isOpen, onOpen, onClose} = useDisclosure();
+  const btnRef = useRef<HTMLButtonElement | undefined>(null);
 
   const text = React.useMemo(
     () =>
@@ -33,6 +44,12 @@ const Home: React.FC<Props> = ({products}) => {
         ),
     [cart],
   );
+
+  React.useEffect(() => {
+    if (btnRef.current) {
+      btnRef.current.focus();
+    }
+  }, []);
 
   return (
     <Stack>
@@ -76,6 +93,37 @@ const Home: React.FC<Props> = ({products}) => {
           </Button>
         </Flex>
       )}
+      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+        Open
+      </Button>
+      <Drawer finalFocusRef={btnRef} isOpen={isOpen} placement="right" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Carrito ({cart.length} productos)</DrawerHeader>
+
+          <DrawerBody>
+            {cart.map((car, index) => (
+              <Flex key={index}>
+                <Stack spacing={1}>
+                  <Text>{car.title}</Text>
+                  <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
+                    ${car.price}
+                  </Text>
+                </Stack>
+                ;
+              </Flex>
+            ))}
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button mr={3} variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </Stack>
   );
 };
