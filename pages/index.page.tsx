@@ -1,7 +1,7 @@
 import type {Product} from "./components/types";
 
 import React, {useRef, useState} from "react";
-import {Button, Flex, Grid, Link, Stack, Text, useDisclosure} from "@chakra-ui/react";
+import {Button, Flex, Grid, Image, Link, Stack, Text, useDisclosure} from "@chakra-ui/react";
 import {
   Drawer,
   DrawerBody,
@@ -71,6 +71,12 @@ const Home: React.FC<Props> = ({products}) => {
             padding={4}
           >
             <Stack marginBottom={4} spacing={1}>
+              <Image
+                alt={product.title}
+                maxHeight={"128px"}
+                objectFit="cover"
+                src={product.image}
+              />
               <Text>{product.title}</Text>
               <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
                 ${product.price}
