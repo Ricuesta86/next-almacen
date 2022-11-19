@@ -45,8 +45,11 @@ const Home: React.FC<Props> = ({products}) => {
     [cart],
   );
 
-  const handleRemoveProductCart = (value: string) => {
-    setCart(cart.filter((car) => car.id !== value));
+  const handleRemoveProductCart = (value: number) => {
+    const newCart = [...cart];
+
+    newCart.splice(value, 1);
+    setCart(newCart);
   };
 
   React.useEffect(() => {
@@ -108,7 +111,7 @@ const Home: React.FC<Props> = ({products}) => {
                     <Button
                       height={"30px"}
                       width={"30px"}
-                      onClick={() => handleRemoveProductCart(car.id)}
+                      onClick={() => handleRemoveProductCart(index)}
                     >
                       X
                     </Button>
@@ -140,7 +143,7 @@ const Home: React.FC<Props> = ({products}) => {
               isExternal
               as={Link}
               colorScheme={"whatsapp"}
-              href={`https://wa.me/5352152326?text=${encodeURIComponent(text)}`}
+              href={`https://wa.me/5352040404?text=${encodeURIComponent(text)}`}
             >
               Comprar por Whatsapp
             </Button>
