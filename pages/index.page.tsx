@@ -11,7 +11,17 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 import {GetStaticProps} from "next";
+import {motion, AnimatePresence, AnimateSharedLayout} from "framer-motion";
 
 import api from "./components/Products/api";
 
@@ -28,6 +38,7 @@ function parseCurrency(value: number): string {
 
 const Home: React.FC<Props> = ({products}) => {
   const [cart, setCart] = useState<Product[]>([]);
+  const [selectImage, setSelectImage] = useState<string>(null);
   const {isOpen, onOpen, onClose} = useDisclosure();
   const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -59,106 +70,115 @@ const Home: React.FC<Props> = ({products}) => {
   }, []);
 
   return (
-    <Stack>
-      <Grid gridGap={6} templateColumns={"repeat(auto-fill, minmax(240px, 1fr))"}>
-        {products.map((product) => (
+    <AnimateSharedLayout type={"crossfade"}>
+      <Stack>
+        <Grid gridGap={6} templateColumns={"repeat(auto-fill, minmax(240px, 1fr))"}>
+          {products.map((product) => (
+            <Flex
+              key={product.id}
+              background={"gray.100"}
+              borderRadius={"md"}
+              flexDirection={"column"}
+              justifyContent={"space-between"}
+              padding={4}
+            >
+              <Stack marginBottom={4} spacing={1}>
+                <Image
+                  alt={product.title}
+                  as={motion.img}
+                  borderRadius={"md"}
+                  cursor={"pointer"}
+                  layoutId={product.image}
+                  maxHeight={"128px"}
+                  objectFit="cover"
+                  padding={2}
+                  src={product.image}
+                />
+                <Text>{product.title}</Text>
+                <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
+                  ${product.price}
+                </Text>
+              </Stack>
+              <Button
+                colorScheme={"primary"}
+                onClick={() => setCart((cart) => cart.concat(product))}
+              >
+                Agregar
+              </Button>
+            </Flex>
+          ))}
+        </Grid>
+        {Boolean(cart.length) && (
           <Flex
-            key={product.id}
-            background={"gray.100"}
-            borderRadius={"md"}
-            flexDirection={"column"}
-            justifyContent={"space-between"}
+            alignItems={"center"}
+            bottom={0}
+            justifyContent={"center"}
             padding={4}
+            position={"sticky"}
           >
-            <Stack marginBottom={4} spacing={1}>
-              <Image
-                alt={product.title}
-                borderRadius={"md"}
-                maxHeight={"128px"}
-                objectFit="cover"
-                padding={2}
-                src={product.image}
-              />
-              <Text>{product.title}</Text>
-              <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
-                ${product.price}
-              </Text>
-            </Stack>
-            <Button colorScheme={"primary"} onClick={() => setCart((cart) => cart.concat(product))}>
-              Agregar
+            <Button ref={btnRef} colorScheme="whatsapp" onClick={onOpen}>
+              Ver Carrito ({cart.length} productos)
             </Button>
           </Flex>
-        ))}
-      </Grid>
-      {Boolean(cart.length) && (
-        <Flex
-          alignItems={"center"}
-          bottom={0}
-          justifyContent={"center"}
-          padding={4}
-          position={"sticky"}
-        >
-          <Button ref={btnRef} colorScheme="whatsapp" onClick={onOpen}>
-            Ver Carrito ({cart.length} productos)
-          </Button>
-        </Flex>
-      )}
+        )}
 
-      <Drawer finalFocusRef={btnRef} isOpen={isOpen} placement="right" onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Carrito ({cart.length} productos)</DrawerHeader>
+        <Drawer finalFocusRef={btnRef} isOpen={isOpen} placement="right" onClose={onClose}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Carrito ({cart.length} productos)</DrawerHeader>
 
-          <DrawerBody>
-            {cart.map((car, index) => (
-              <Flex key={index}>
-                <Stack spacing={1}>
-                  <Text paddingY={2}>
-                    {`${car.title} - $${car.price}`}{" "}
-                    <Button
-                      height={"30px"}
-                      width={"30px"}
-                      onClick={() => handleRemoveProductCart(index)}
-                    >
-                      X
-                    </Button>
-                  </Text>
-                </Stack>
+            <DrawerBody>
+              {cart.map((car, index) => (
+                <Flex key={index}>
+                  <Stack spacing={1}>
+                    <Text paddingY={2}>
+                      {`${car.title} - $${car.price}`}{" "}
+                      <Button
+                        height={"30px"}
+                        width={"30px"}
+                        onClick={() => handleRemoveProductCart(index)}
+                      >
+                        X
+                      </Button>
+                    </Text>
+                  </Stack>
+                </Flex>
+              ))}
+              <Flex
+                alignItems={"center"}
+                backgroundColor={"gray.100"}
+                borderRadius={"lg"}
+                bottom={0}
+                justifyContent={"center"}
+                padding={4}
+                position={"sticky"}
+                width={"100%"}
+              >
+                <Text fontSize={28} fontWeight={700}>
+                  Total: {parseCurrency(cart.reduce((total, car) => total + car.price, 0))}
+                </Text>
               </Flex>
-            ))}
-            <Flex
-              alignItems={"center"}
-              backgroundColor={"gray.100"}
-              borderRadius={"lg"}
-              bottom={0}
-              justifyContent={"center"}
-              padding={4}
-              position={"sticky"}
-              width={"100%"}
-            >
-              <Text fontSize={28} fontWeight={700}>
-                Total: {parseCurrency(cart.reduce((total, car) => total + car.price, 0))}
-              </Text>
-            </Flex>
-          </DrawerBody>
+            </DrawerBody>
 
-          <DrawerFooter>
-            <Button mr={3} variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button
-              isExternal
-              as={Link}
-              colorScheme={"whatsapp"}
-              href={`https://wa.me/5352040404?text=${encodeURIComponent(text)}`}
-            >
-              Comprar por Whatsapp
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </Stack>
+            <DrawerFooter>
+              <Button mr={3} variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                isExternal
+                as={Link}
+                colorScheme={"whatsapp"}
+                href={`https://wa.me/5352040404?text=${encodeURIComponent(text)}`}
+              >
+                Comprar por Whatsapp
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </Stack>
+      <AnimatePresence>{selectImage && <Flex key={} />}</AnimatePresence>
+    </AnimateSharedLayout>
   );
 };
 
