@@ -73,8 +73,10 @@ const Home: React.FC<Props> = ({products}) => {
             <Stack marginBottom={4} spacing={1}>
               <Image
                 alt={product.title}
+                borderRadius={"md"}
                 maxHeight={"128px"}
                 objectFit="cover"
+                padding={2}
                 src={product.image}
               />
               <Text>{product.title}</Text>
