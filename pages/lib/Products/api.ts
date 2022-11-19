@@ -1,7 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
 
-import {Product} from "./types";
+import {Product} from "../types";
 
 const api = {
   list: async (): Promise<Product[]> => {
