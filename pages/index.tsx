@@ -29,7 +29,7 @@ function parseCurrency(value: number): string {
 const Home: React.FC<Props> = ({products}) => {
   const [cart, setCart] = useState<Product[]>([]);
   const {isOpen, onOpen, onClose} = useDisclosure();
-  const btnRef = useRef<HTMLButtonElement | undefined>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   const text = React.useMemo(
     () =>
@@ -87,7 +87,7 @@ const Home: React.FC<Props> = ({products}) => {
           padding={4}
           position={"sticky"}
         >
-          <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+          <Button ref={btnRef} colorScheme="whatsapp" onClick={onOpen}>
             Ver Carrito ({cart.length} productos)
           </Button>
         </Flex>
@@ -103,14 +103,33 @@ const Home: React.FC<Props> = ({products}) => {
             {cart.map((car, index) => (
               <Flex key={index}>
                 <Stack spacing={1}>
-                  <Text>{car.title}</Text>
-                  <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
-                    ${car.price}
+                  <Text paddingY={2}>
+                    {`${car.title} - $${car.price}`}{" "}
+                    <Button
+                      height={"30px"}
+                      width={"30px"}
+                      onClick={() => handleRemoveProductCart(car.id)}
+                    >
+                      X
+                    </Button>
                   </Text>
-                  <Button onClick={() => handleRemoveProductCart(car.id)}>X</Button>
                 </Stack>
               </Flex>
             ))}
+            <Flex
+              alignItems={"center"}
+              backgroundColor={"gray.100"}
+              borderRadius={"lg"}
+              bottom={0}
+              justifyContent={"center"}
+              padding={4}
+              position={"sticky"}
+              width={"100%"}
+            >
+              <Text fontSize={28} fontWeight={700}>
+                Total: {parseCurrency(cart.reduce((total, car) => total + car.price, 0))}
+              </Text>
+            </Flex>
           </DrawerBody>
 
           <DrawerFooter>
