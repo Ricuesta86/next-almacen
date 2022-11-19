@@ -70,7 +70,7 @@ const Home: React.FC<Props> = ({products}) => {
             justifyContent={"space-between"}
             padding={4}
           >
-            <Stack spacing={1}>
+            <Stack marginBottom={4} spacing={1}>
               <Text>{product.title}</Text>
               <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
                 ${product.price}
