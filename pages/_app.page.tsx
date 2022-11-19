@@ -11,7 +11,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 
-import theme from "./lib/theme";
+import theme from "./components/theme";
 
 function MyApp({Component, pageProps}: AppProps) {
   return (

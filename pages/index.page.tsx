@@ -1,4 +1,4 @@
-import type {Product} from "./lib/types";
+import type {Product} from "./components/types";
 
 import React, {useRef, useState} from "react";
 import {Button, Flex, Grid, Link, Stack, Text, useDisclosure} from "@chakra-ui/react";
@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import {GetStaticProps} from "next";
 
-import api from "./lib/Products/api";
+import api from "./components/Products/api";
 
 interface Props {
   products: Product[];
