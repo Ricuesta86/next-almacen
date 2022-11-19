@@ -26,7 +26,13 @@ function MyApp({Component, pageProps}: AppProps) {
           padding={"4"}
         >
           <VStack marginBottom={6}>
-            <Image alt="Placehorld" borderRadius={9999} src="//placehold.it/128x128" />
+            <Image
+              alt="Placehorld"
+              borderRadius={9999}
+              boxSize="128px"
+              objectFit="cover"
+              src={"./asserts/images.jpg"}
+            />
             <Heading>Almacen</Heading>
             <Text>El almacen de Ricuesta</Text>
           </VStack>
