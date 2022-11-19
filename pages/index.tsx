@@ -45,6 +45,10 @@ const Home: React.FC<Props> = ({products}) => {
     [cart],
   );
 
+  const handleRemoveProductCart = (value: string) => {
+    setCart(cart.filter((car) => car.id !== value));
+  };
+
   React.useEffect(() => {
     if (btnRef.current) {
       btnRef.current.focus();
@@ -83,19 +87,12 @@ const Home: React.FC<Props> = ({products}) => {
           padding={4}
           position={"sticky"}
         >
-          <Button
-            isExternal
-            as={Link}
-            colorScheme={"whatsapp"}
-            href={`https://wa.me/5352152326?text=${encodeURIComponent(text)}`}
-          >
-            Ver carrito ({cart.length} productos)
+          <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+            Ver Carrito ({cart.length} productos)
           </Button>
         </Flex>
       )}
-      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Open
-      </Button>
+
       <Drawer finalFocusRef={btnRef} isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
@@ -110,8 +107,8 @@ const Home: React.FC<Props> = ({products}) => {
                   <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
                     ${car.price}
                   </Text>
+                  <Button onClick={() => handleRemoveProductCart(car.id)}>X</Button>
                 </Stack>
-                ;
               </Flex>
             ))}
           </DrawerBody>
@@ -120,7 +117,14 @@ const Home: React.FC<Props> = ({products}) => {
             <Button mr={3} variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue">Save</Button>
+            <Button
+              isExternal
+              as={Link}
+              colorScheme={"whatsapp"}
+              href={`https://wa.me/5352152326?text=${encodeURIComponent(text)}`}
+            >
+              Comprar por Whatsapp
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
