@@ -29,7 +29,7 @@ function parseCurrency(value: number): string {
 
 const Home: React.FC<Props> = ({products}) => {
   const [cart, setCart] = useState<Product[]>([]);
-  const [selectImage, setSelectImage] = useState<string>(null);
+  const [selectImage, setSelectImage] = useState<string | null>(null);
   const {isOpen, onOpen, onClose} = useDisclosure();
   const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -61,7 +61,7 @@ const Home: React.FC<Props> = ({products}) => {
   }, []);
 
   return (
-    <AnimateSharedLayout type={"crossfade"}>
+    <AnimateSharedLayout>
       <Stack>
         <Grid gridGap={6} templateColumns={"repeat(auto-fill, minmax(240px, 1fr))"}>
           {products.map((product) => (
@@ -100,19 +100,25 @@ const Home: React.FC<Props> = ({products}) => {
             </Flex>
           ))}
         </Grid>
-        {Boolean(cart.length) && (
-          <Flex
-            alignItems={"center"}
-            bottom={0}
-            justifyContent={"center"}
-            padding={4}
-            position={"sticky"}
-          >
-            <Button ref={btnRef} colorScheme="whatsapp" onClick={onOpen}>
-              Ver Carrito ({cart.length} productos)
-            </Button>
-          </Flex>
-        )}
+        <AnimatePresence>
+          {Boolean(cart.length) && (
+            <Flex
+              alignItems={"center"}
+              animate={{scale: 1}}
+              as={motion.div}
+              bottom={0}
+              exit={{scale: 0}}
+              initial={{scale: 0}}
+              justifyContent={"center"}
+              padding={4}
+              position={"sticky"}
+            >
+              <Button ref={btnRef} colorScheme="whatsapp" onClick={onOpen}>
+                Ver Carrito ({cart.length} productos)
+              </Button>
+            </Flex>
+          )}
+        </AnimatePresence>
 
         <Drawer finalFocusRef={btnRef} isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
