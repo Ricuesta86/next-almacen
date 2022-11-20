@@ -11,15 +11,6 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from "@chakra-ui/react";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from "@chakra-ui/react";
 import {GetStaticProps} from "next";
 import {motion, AnimatePresence, AnimateSharedLayout} from "framer-motion";
 
@@ -93,6 +84,7 @@ const Home: React.FC<Props> = ({products}) => {
                   objectFit="cover"
                   padding={2}
                   src={product.image}
+                  onClick={() => setSelectImage(product.image)}
                 />
                 <Text>{product.title}</Text>
                 <Text color={"green.500"} fontSize={"sm"} fontWeight={"500"}>
@@ -177,7 +169,26 @@ const Home: React.FC<Props> = ({products}) => {
           </DrawerContent>
         </Drawer>
       </Stack>
-      <AnimatePresence>{selectImage && <Flex key={} />}</AnimatePresence>
+      <AnimatePresence>
+        {selectImage && (
+          <Flex
+            key={"backdrop"}
+            alignItems={"center"}
+            as={motion.div}
+            backgroundColor={"rgba(0,0,0,0.5)"}
+            height={"100%"}
+            justifyContent="center"
+            layoutId={selectImage}
+            left={0}
+            position="fixed"
+            top="0"
+            width={"100%"}
+            onClick={() => setSelectImage(null)}
+          >
+            <Image key={"image"} alt="Image" maxHeight={"300px"} src={selectImage} />
+          </Flex>
+        )}
+      </AnimatePresence>
     </AnimateSharedLayout>
   );
 };
